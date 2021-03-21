@@ -1,0 +1,26 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: route1
+          uri: http://192.168.1.102:8080
+          predicates:
+            # 只要是以/gateway开头，不管什么请求都给匹配到上面的uri上
+            - Path=/api/gateway/**
+            # 两层判断，上面不过就不判断下面了id是参数名，.是参数规则，可以写正则，下面就是一定要有id且为一位才让过，否则404
+            # - Query=id,.
+            # 匹配请求方法,允许请求中的以下方法
+            - Method=get,post
+            # 规定了Cookie里面必须有的东西，没有或者对不上都会404
+            # - Cookie=name,xiaoming
+          filters:
+            # 去2级前缀，也就是上面匹配上之后，把/api/gateway去掉
+            - StripPrefix=2
+  application:
+    name: springcloud-gateway
+server:
+  port: 80
+eureka:
+  client:
+    service-url:
+      defaultZone: http://lisz:123@eureka-7900:7900/eureka/,http://lisz:123$eureka-7901:7901/eureka/
