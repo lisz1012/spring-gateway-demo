@@ -4,8 +4,18 @@ spring:
       discovery:
         locator:
           # 把下面的routes注释掉，然后把这里的服务发现定位器打开，就会从下面配置的Eureka里面拉去服务信息（所以就不用写下面的routes了）
-          # 访问的时候一定要：http://网关地址/服务名称（大写）/**   就像在EUREKA网页中显示的那样
+          # 访问的时候一定要：http://网关地址/服务名称（大写）/**   服务名一定要大写！！就像在EUREKA网页中显示的那样.
+          # 从Eureka拉回来的是服务名 + IP地址，然后自动选一个服务IP访问，做负载均衡（Springcloud Gateway的职责之一）
+          # https://blog.51cto.com/14888386/2516357
           enabled: true
+      # 不想总用大写的服务名就配置自己的routes，但是上面的大写服务名依然好使
+      routes:
+        - id: mdb
+          predicates:
+            - Path=/mongodb/**
+          uri: lb://MONGODB
+          filters:
+            - StripPrefix=1
 #      routes:
 #        - id: route1
 #          uri: http://192.168.1.102:8080
