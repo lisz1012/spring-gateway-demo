@@ -20,7 +20,7 @@ public class MyFilter2 implements Ordered, GlobalFilter {
 	@Override
 	public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
 		System.out.println("222");
-		return chain.filter(exchange);
+		return chain.filter(exchange); //继续FilterChain，类似于我们熟悉的J2EE里面的Filter的做法
 	}
 
 	@Override
